@@ -3,12 +3,29 @@ const platformEl = document.getElementById('platform');
 const logEl      = document.getElementById('log');
 
 const PLATFORM_NAMES = {
-  'greenhouse.io': 'Greenhouse',
-  'lever.co':      'Lever',
-  'ashbyhq.com':   'Ashby',
-  'wellfound.com': 'Wellfound',
-  'instahyre.com': 'Instahyre',
-  'naukri.com':    'Naukri',
+  'greenhouse.io':       'Greenhouse',
+  'lever.co':            'Lever',
+  'ashbyhq.com':         'Ashby',
+  'wellfound.com':       'Wellfound',
+  'instahyre.com':       'Instahyre',
+  'naukri.com':          'Naukri',
+  'simplyhired.com':     'SimplyHired',
+  'jobspresso.co':       'Jobspresso',
+  'stackoverflow.com':   'Stack Overflow Jobs',
+  'indeed.com':          'Indeed',
+  'glassdoor.com':       'Glassdoor',
+  'nodesk.co':           'NoDesk',
+  'remotive.com':        'Remotive',
+  'remote4me.com':       'Remote4Me',
+  'pangian.com':         'Pangian',
+  'remotees.com':        'Remotees',
+  'remotehabits.com':    'RemoteHabits',
+  'skipthechive.com':    'Skip The Drive',
+  'europeremotely.com':  'Europe Remotely',
+  'workingnomads.com':   'Working Nomads',
+  'virtualvocations.com':'Virtual Vocations',
+  'weworkremotely.com':  'We Work Remotely',
+  'flexjobs.com':        'FlexJobs',
 };
 
 function log(msg, isErr = false) {

@@ -66,12 +66,29 @@ if (!window.__aiJobFillerLoaded) {
   // ─── Platform detection ───────────────────────────────────────────────────────
 
   function detectPlatform(url) {
-    if (/greenhouse\.io/.test(url)) return 'greenhouse';
-    if (/lever\.co/.test(url)) return 'lever';
-    if (/ashbyhq\.com/.test(url)) return 'ashby';
-    if (/wellfound\.com/.test(url)) return 'wellfound';
-    if (/instahyre\.com/.test(url)) return 'instahyre';
-    if (/naukri\.com/.test(url)) return 'naukri';
+    if (/greenhouse\.io/.test(url))      return 'greenhouse';
+    if (/lever\.co/.test(url))           return 'lever';
+    if (/ashbyhq\.com/.test(url))        return 'ashby';
+    if (/wellfound\.com/.test(url))      return 'wellfound';
+    if (/instahyre\.com/.test(url))      return 'instahyre';
+    if (/naukri\.com/.test(url))         return 'naukri';
+    if (/simplyhired\.com/.test(url))    return 'simplyhired';
+    if (/jobspresso\.co/.test(url))      return 'jobspresso';
+    if (/stackoverflow\.com/.test(url))  return 'stackoverflow';
+    if (/indeed\.com/.test(url))         return 'indeed';
+    if (/glassdoor\.com/.test(url))      return 'glassdoor';
+    if (/nodesk\.co/.test(url))          return 'nodesk';
+    if (/remotive\.com/.test(url))       return 'remotive';
+    if (/remote4me\.com/.test(url))      return 'remote4me';
+    if (/pangian\.com/.test(url))        return 'pangian';
+    if (/remotees\.com/.test(url))       return 'remotees';
+    if (/remotehabits\.com/.test(url))   return 'remotehabits';
+    if (/skipthechive\.com/.test(url))   return 'skipthechive';
+    if (/europeremotely\.com/.test(url)) return 'europeremotely';
+    if (/workingnomads\.com/.test(url))  return 'workingnomads';
+    if (/virtualvocations\.com/.test(url)) return 'virtualvocations';
+    if (/weworkremotely\.com/.test(url)) return 'weworkremotely';
+    if (/flexjobs\.com/.test(url))       return 'flexjobs';
     return null;
   }
 
@@ -82,13 +99,32 @@ if (!window.__aiJobFillerLoaded) {
   const LEVER_STD_NAMES = new Set(['name', 'email', 'phone', 'org', 'comments', 'urls[LinkedIn]', 'urls[Github]', 'urls[GitHub]', 'urls[Twitter]', 'urls[Portfolio]', 'urls[Other]']);
   const ASHBY_STD_NAMES = new Set(['_systemfield_name', '_systemfield_email', '_systemfield_phone', '_systemfield_linkedin_url', '_systemfield_github', '_systemfield_website', 'name', 'email', 'phone']);
 
+  const GENERIC_STD_LABELS = ['name', 'email', 'phone', 'mobile', 'linkedin', 'resume', 'cv', 'cover letter', 'github', 'portfolio', 'website'];
+
   const STD_LABELS = {
-    greenhouse: ['first name', 'last name', 'email', 'phone number', 'phone', 'resume', 'cover letter', 'linkedin', 'github', 'portfolio', 'website'],
-    lever:      ['full name', 'name', 'email', 'phone', 'company', 'current company', 'organization', 'linkedin', 'github', 'twitter', 'portfolio', 'website', 'resume', 'cover letter'],
-    ashby:      ['full name', 'first name', 'last name', 'name', 'email', 'phone', 'linkedin', 'github', 'portfolio', 'website', 'resume', 'cv', 'cover letter'],
-    wellfound:  ['name', 'email', 'phone', 'linkedin', 'resume', 'cv'],
-    instahyre:  ['name', 'email', 'phone', 'mobile', 'resume', 'cv'],
-    naukri:     ['name', 'email', 'phone', 'mobile', 'resume', 'cv', 'current ctc', 'expected ctc', 'notice period', 'experience'],
+    greenhouse:      ['first name', 'last name', 'email', 'phone number', 'phone', 'resume', 'cover letter', 'linkedin', 'github', 'portfolio', 'website'],
+    lever:           ['full name', 'name', 'email', 'phone', 'company', 'current company', 'organization', 'linkedin', 'github', 'twitter', 'portfolio', 'website', 'resume', 'cover letter'],
+    ashby:           ['full name', 'first name', 'last name', 'name', 'email', 'phone', 'linkedin', 'github', 'portfolio', 'website', 'resume', 'cv', 'cover letter'],
+    wellfound:       ['name', 'email', 'phone', 'linkedin', 'resume', 'cv'],
+    instahyre:       ['name', 'email', 'phone', 'mobile', 'resume', 'cv'],
+    naukri:          ['name', 'email', 'phone', 'mobile', 'resume', 'cv', 'current ctc', 'expected ctc', 'notice period', 'experience'],
+    simplyhired:     GENERIC_STD_LABELS,
+    jobspresso:      GENERIC_STD_LABELS,
+    stackoverflow:   GENERIC_STD_LABELS,
+    indeed:          GENERIC_STD_LABELS,
+    glassdoor:       GENERIC_STD_LABELS,
+    nodesk:          GENERIC_STD_LABELS,
+    remotive:        GENERIC_STD_LABELS,
+    remote4me:       GENERIC_STD_LABELS,
+    pangian:         GENERIC_STD_LABELS,
+    remotees:        GENERIC_STD_LABELS,
+    remotehabits:    GENERIC_STD_LABELS,
+    skipthechive:    GENERIC_STD_LABELS,
+    europeremotely:  GENERIC_STD_LABELS,
+    workingnomads:   GENERIC_STD_LABELS,
+    virtualvocations:GENERIC_STD_LABELS,
+    weworkremotely:  GENERIC_STD_LABELS,
+    flexjobs:        GENERIC_STD_LABELS,
   };
 
   // ─── fillBasics per platform ──────────────────────────────────────────────────
@@ -157,17 +193,81 @@ if (!window.__aiJobFillerLoaded) {
     if (profile.expectedSalary)  tryFill(['input[placeholder*="expected salary" i]', 'input[placeholder*="expected ctc" i]'], String(profile.expectedSalary));
   }
 
-  const FILL_BASICS = { greenhouse: fillBasicsGreenhouse, lever: fillBasicsLever, ashby: fillBasicsAshby, wellfound: fillBasicsWellfound, instahyre: fillBasicsInstahyre, naukri: fillBasicsNaukri };
+  function fillBasicsGeneric(profile) {
+    const fullName = `${profile.firstName} ${profile.lastName}`;
+    const nameFilled = tryFill([
+      'input[autocomplete="name"]',
+      'input[placeholder*="full name" i]',
+      'input[aria-label*="full name" i]',
+    ], fullName);
+    if (!nameFilled) {
+      tryFill(['input[autocomplete="given-name"]', 'input[name*="first" i]', 'input[placeholder*="first name" i]'], profile.firstName);
+      tryFill(['input[autocomplete="family-name"]', 'input[name*="last" i]',  'input[placeholder*="last name" i]'],  profile.lastName);
+    }
+    tryFill(['input[type="email"]', 'input[name*="email" i]', 'input[placeholder*="email" i]'], profile.email);
+    tryFill(['input[type="tel"]', 'input[name*="phone" i]', 'input[placeholder*="phone" i]', 'input[placeholder*="mobile" i]'], profile.phone);
+    if (profile.linkedin) tryFill(['input[name*="linkedin" i]', 'input[placeholder*="linkedin" i]', 'input[aria-label*="linkedin" i]'], profile.linkedin);
+    const portfolio = profile.portfolio || profile.website;
+    if (portfolio) tryFill(['input[name*="portfolio" i]', 'input[placeholder*="portfolio" i]', 'input[name*="website" i]', 'input[placeholder*="website" i]'], portfolio);
+  }
+
+  const FILL_BASICS = {
+    greenhouse:      fillBasicsGreenhouse,
+    lever:           fillBasicsLever,
+    ashby:           fillBasicsAshby,
+    wellfound:       fillBasicsWellfound,
+    instahyre:       fillBasicsInstahyre,
+    naukri:          fillBasicsNaukri,
+    simplyhired:     fillBasicsGeneric,
+    jobspresso:      fillBasicsGeneric,
+    stackoverflow:   fillBasicsGeneric,
+    indeed:          fillBasicsGeneric,
+    glassdoor:       fillBasicsGeneric,
+    nodesk:          fillBasicsGeneric,
+    remotive:        fillBasicsGeneric,
+    remote4me:       fillBasicsGeneric,
+    pangian:         fillBasicsGeneric,
+    remotees:        fillBasicsGeneric,
+    remotehabits:    fillBasicsGeneric,
+    skipthechive:    fillBasicsGeneric,
+    europeremotely:  fillBasicsGeneric,
+    workingnomads:   fillBasicsGeneric,
+    virtualvocations:fillBasicsGeneric,
+    weworkremotely:  fillBasicsGeneric,
+    flexjobs:        fillBasicsGeneric,
+  };
 
   // ─── getJobDescription ────────────────────────────────────────────────────────
 
+  const GENERIC_JD_SELECTORS = [
+    '.job-description', '[class*="job-description"]', '[class*="jobDescription"]',
+    '.job-details', '[class*="job-details"]', 'article', 'main',
+  ];
+
   const JD_SELECTORS = {
-    greenhouse: ['.job-description', '#content', '[class*="job-description"]', '.posting-description', '[data-ui="job-description"]'],
-    lever:      ['.posting-description', '[data-qa="job-description"]', '.posting-body .content', '.section-wrapper .content'],
-    ashby:      ['[class*="ashby-job-posting-description"]', '[class*="jobDescription"]', '[data-testid="job-description"]', 'main'],
-    wellfound:  ['[class*="jobDescription"]', '[class*="job_description"]', '[data-test="job-description"]', '.job-description'],
-    instahyre:  ['.job-description', '[class*="jobDescription"]', '[class*="job-desc"]', '.jd-content', '.description-content'],
-    naukri:     ['.job-desc', '[class*="jobDescription"]', '.dang-inner-html', '.jd-desc', '[class*="description"]'],
+    greenhouse:      ['.job-description', '#content', '[class*="job-description"]', '.posting-description', '[data-ui="job-description"]'],
+    lever:           ['.posting-description', '[data-qa="job-description"]', '.posting-body .content', '.section-wrapper .content'],
+    ashby:           ['[class*="ashby-job-posting-description"]', '[class*="jobDescription"]', '[data-testid="job-description"]', 'main'],
+    wellfound:       ['[class*="jobDescription"]', '[class*="job_description"]', '[data-test="job-description"]', '.job-description'],
+    instahyre:       ['.job-description', '[class*="jobDescription"]', '[class*="job-desc"]', '.jd-content', '.description-content'],
+    naukri:          ['.job-desc', '[class*="jobDescription"]', '.dang-inner-html', '.jd-desc', '[class*="description"]'],
+    simplyhired:     GENERIC_JD_SELECTORS,
+    jobspresso:      GENERIC_JD_SELECTORS,
+    stackoverflow:   ['.job-details--content', '[class*="job-description"]', ...GENERIC_JD_SELECTORS],
+    indeed:          ['.jobsearch-jobDescriptionText', '[class*="job-description"]', ...GENERIC_JD_SELECTORS],
+    glassdoor:       ['[class*="JobDescription"]', '[class*="job-description"]', ...GENERIC_JD_SELECTORS],
+    nodesk:          GENERIC_JD_SELECTORS,
+    remotive:        ['.job-description', '[class*="description"]', ...GENERIC_JD_SELECTORS],
+    remote4me:       GENERIC_JD_SELECTORS,
+    pangian:         GENERIC_JD_SELECTORS,
+    remotees:        GENERIC_JD_SELECTORS,
+    remotehabits:    GENERIC_JD_SELECTORS,
+    skipthechive:    GENERIC_JD_SELECTORS,
+    europeremotely:  GENERIC_JD_SELECTORS,
+    workingnomads:   GENERIC_JD_SELECTORS,
+    virtualvocations:GENERIC_JD_SELECTORS,
+    weworkremotely:  ['.listing-container', '[class*="job-description"]', ...GENERIC_JD_SELECTORS],
+    flexjobs:        ['.description', '[class*="job-description"]', ...GENERIC_JD_SELECTORS],
   };
 
   function getJobDescription(platform) {

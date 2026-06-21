@@ -4,6 +4,25 @@ import { AshbyAdapter }      from './ashby.js';
 import { WellfoundAdapter }  from './wellfound.js';
 import { InstahyreAdapter }  from './instahyre.js';
 import { NaukriAdapter }     from './naukri.js';
+import {
+  SimplyHiredAdapter,
+  JobspressoAdapter,
+  StackOverflowAdapter,
+  IndeedAdapter,
+  GlassdoorAdapter,
+  NoDeskAdapter,
+  RemotiveAdapter,
+  Remote4MeAdapter,
+  PangianAdapter,
+  RemoteesAdapter,
+  RemoteHabitsAdapter,
+  SkipTheDriveAdapter,
+  EuropeRemotelyAdapter,
+  WorkingNomadsAdapter,
+  VirtualVocationsAdapter,
+  WeWorkRemotelyAdapter,
+  FlexJobsAdapter,
+} from './jobboards.js';
 
 const ADAPTERS = [
   GreenhouseAdapter,
@@ -12,6 +31,23 @@ const ADAPTERS = [
   WellfoundAdapter,
   InstahyreAdapter,
   NaukriAdapter,
+  SimplyHiredAdapter,
+  JobspressoAdapter,
+  StackOverflowAdapter,
+  IndeedAdapter,
+  GlassdoorAdapter,
+  NoDeskAdapter,
+  RemotiveAdapter,
+  Remote4MeAdapter,
+  PangianAdapter,
+  RemoteesAdapter,
+  RemoteHabitsAdapter,
+  SkipTheDriveAdapter,
+  EuropeRemotelyAdapter,
+  WorkingNomadsAdapter,
+  VirtualVocationsAdapter,
+  WeWorkRemotelyAdapter,
+  FlexJobsAdapter,
 ];
 
 /**
