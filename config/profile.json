@@ -1,0 +1,15 @@
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com",
+  "phone": "+91-9999999999",
+  "location": "Bengaluru, Karnataka, India",
+  "linkedin": "https://linkedin.com/in/janedoe",
+  "github": "https://github.com/janedoe",
+  "portfolio": "https://janedoe.dev",
+  "workAuthorization": "Indian Citizen",
+  "yearsExperience": 4,
+  "currentCompany": "Acme Corp",
+  "noticePeriod": "30 days",
+  "expectedCtc": "25 LPA"
+}

@@ -1,0 +1,2 @@
+# Paste your plain-text resume here.
+# Claude reads this file as context when writing free-text answers.

@@ -1,0 +1,9 @@
+# One job URL per line. Lines starting with # are ignored.
+
+# --- Test batch: Greenhouse ---
+# Replace these with current live postings from boards.greenhouse.io or job-boards.greenhouse.io
+# Find openings at: https://www.greenhouse.io/job-board
+
+https://boards.greenhouse.io/anthropic/jobs/4020305008
+https://boards.greenhouse.io/notion/jobs/6146083003
+https://boards.greenhouse.io/figma/jobs/5238990004

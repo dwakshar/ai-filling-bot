@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AI Job Filler – Settings</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 580px; margin: 36px auto; padding: 0 20px; font-size: 14px; color: #1e293b; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    .sub { color: #64748b; font-size: 13px; margin-bottom: 28px; }
+    h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
+    label { display: block; font-size: 12px; font-weight: 500; color: #475569; margin-bottom: 4px; }
+    input, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-family: inherit; margin-bottom: 14px; outline: none; transition: border-color 0.15s; }
+    input:focus, textarea:focus { border-color: #6366f1; }
+    textarea { resize: vertical; min-height: 150px; font-family: 'Courier New', monospace; font-size: 12px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid2 input { margin-bottom: 0; }
+    .grid2 > div { margin-bottom: 14px; }
+    button { padding: 9px 22px; background: #4f46e5; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; }
+    button:hover { background: #4338ca; }
+    #status { display: inline-block; margin-left: 12px; font-size: 13px; color: #16a34a; }
+    .note { font-size: 11px; color: #94a3b8; margin: -10px 0 14px; }
+  </style>
+</head>
+<body>
+  <h1>AI Job Filler</h1>
+  <p class="sub">All settings are stored locally in your browser — never sent anywhere except the Claude API.</p>
+
+  <h2>Anthropic API Key</h2>
+  <label>API Key</label>
+  <input type="password" id="apiKey" placeholder="sk-ant-api03-…" autocomplete="off">
+
+  <h2>Your Profile</h2>
+  <div class="grid2">
+    <div><label>First Name</label><input type="text" id="firstName"></div>
+    <div><label>Last Name</label><input type="text" id="lastName"></div>
+  </div>
+  <label>Email</label>
+  <input type="email" id="email">
+  <label>Phone</label>
+  <input type="tel" id="phone" placeholder="+91 99999 99999">
+  <label>LinkedIn URL</label>
+  <input type="url" id="linkedin" placeholder="https://linkedin.com/in/…">
+  <label>GitHub URL</label>
+  <input type="url" id="github" placeholder="https://github.com/…">
+  <label>Portfolio / Website</label>
+  <input type="url" id="portfolio" placeholder="https://…">
+  <label>Current Company</label>
+  <input type="text" id="currentCompany" placeholder="(optional)">
+  <div class="grid2">
+    <div><label>Notice Period</label><input type="text" id="noticePeriod" placeholder="30 days"></div>
+    <div><label>Expected CTC</label><input type="text" id="expectedCtc" placeholder="18 LPA"></div>
+  </div>
+
+  <h2>Resume Text</h2>
+  <p class="note">Paste your plain-text resume. Claude uses this to write custom answers.</p>
+  <textarea id="resume" placeholder="Paste resume here…"></textarea>
+
+  <button id="save">Save Settings</button>
+  <span id="status"></span>
+
+  <script src="options.js"></script>
+</body>
+</html>

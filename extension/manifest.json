@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "AI Job Filler",
+  "version": "1.0.0",
+  "description": "Auto-fill job applications (Greenhouse, Lever, Ashby, Wellfound, Instahyre, Naukri) using Claude AI.",
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "host_permissions": [
+    "https://*.greenhouse.io/*",
+    "https://job-boards.greenhouse.io/*",
+    "https://*.lever.co/*",
+    "https://*.ashbyhq.com/*",
+    "https://*.wellfound.com/*",
+    "https://*.instahyre.com/*",
+    "https://*.naukri.com/*"
+  ],
+  "background": {
+    "service_worker": "background/worker.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "AI Job Filler"
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.greenhouse.io/*",
+        "https://job-boards.greenhouse.io/*",
+        "https://*.lever.co/*",
+        "https://*.ashbyhq.com/*",
+        "https://*.wellfound.com/*",
+        "https://*.instahyre.com/*",
+        "https://*.naukri.com/*"
+      ],
+      "js": ["content/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
