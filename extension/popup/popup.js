@@ -62,6 +62,55 @@ document.getElementById('optionsLink').addEventListener('click', () => {
   chrome.runtime.openOptionsPage();
 });
 
+// ─── History ──────────────────────────────────────────────────────────────────
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    + ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+}
+
+function renderHistory(history) {
+  const list = document.getElementById('historyList');
+  const recent = history.slice(0, 20);
+  if (recent.length === 0) {
+    list.innerHTML = '<div class="hist-empty">No history yet.</div>';
+    return;
+  }
+  list.innerHTML = recent.map(e => {
+    const label = (e.company || new URL(e.url).hostname).slice(0, 28);
+    return `<div class="hist-row">
+      <span class="hist-date">${formatDate(e.timestamp)}</span>
+      <span class="hist-company" title="${e.title || ''}">${label}</span>
+      <span class="hist-status ${e.status}">${e.status}</span>
+    </div>`;
+  }).join('');
+}
+
+async function loadHistory() {
+  const data = await chrome.storage.local.get('history');
+  renderHistory(data.history || []);
+}
+
+loadHistory();
+
+document.getElementById('exportBtn').addEventListener('click', async () => {
+  const data = await chrome.storage.local.get('history');
+  const history = data.history || [];
+  const blob = new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `job-history-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('clearBtn').addEventListener('click', async () => {
+  await chrome.storage.local.remove('history');
+  renderHistory([]);
+});
+
 fillBtn.addEventListener('click', async () => {
   fillBtn.disabled = true;
   logEl.innerHTML = '';

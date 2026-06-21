@@ -351,13 +351,76 @@ if (!window.__aiJobFillerLoaded) {
     chrome.runtime.sendMessage({ action: 'status', msg }).catch(() => {});
   }
 
+  // ─── Job meta scraper (best-effort) ──────────────────────────────────────────
+
+  function scrapeJobMeta(platform) {
+    const TITLE_SELS = {
+      greenhouse: ['h1.app-title', 'h1[class*="title"]', '.job-title', 'h1'],
+      lever:      ['h2[data-qa="posting-name"]', '.posting-headline h2', 'h2', 'h1'],
+      ashby:      ['h1[class*="Title"]', 'h1[class*="title"]', 'h1'],
+      wellfound:  ['h1[class*="title"]', 'h1[class*="Title"]', 'h1'],
+      indeed:     ['h1[class*="jobTitle"]', 'h1'],
+      glassdoor:  ['h1[class*="title"]', 'h1'],
+    };
+    const COMPANY_SELS = {
+      greenhouse: ['.company-name', '[class*="company-name"]'],
+      lever:      ['.main-header-flex a', '[class*="company"]'],
+      ashby:      ['[class*="CompanyName"]', '[class*="company"]'],
+      wellfound:  ['[class*="startup-name"]', '[class*="company"]'],
+      indeed:     ['[data-testid="inlineHeader-companyName"]', '[class*="companyName"]'],
+      glassdoor:  ['[class*="employerName"]', '[class*="companyName"]'],
+    };
+
+    let title = '';
+    for (const sel of (TITLE_SELS[platform] || ['h1'])) {
+      const text = document.querySelector(sel)?.innerText?.trim();
+      if (text) { title = text; break; }
+    }
+
+    let company = '';
+    for (const sel of (COMPANY_SELS[platform] || [])) {
+      const text = document.querySelector(sel)?.innerText?.trim();
+      if (text) { company = text; break; }
+    }
+    if (!company) company = document.querySelector('meta[property="og:site_name"]')?.content?.trim() || '';
+    if (!company) company = location.hostname.replace(/^www\./, '');
+    if (!title)   title   = document.title;
+
+    return { company, title };
+  }
+
+  // ─── History log ─────────────────────────────────────────────────────────────
+
+  async function appendHistory(entry) {
+    const data = await chrome.storage.local.get('history');
+    const history = data.history || [];
+    history.unshift(entry);
+    if (history.length > 500) history.length = 500;
+    await chrome.storage.local.set({ history });
+  }
+
   // ─── Main orchestrator ────────────────────────────────────────────────────────
 
   async function doFill({ profile, resume, apiKey }) {
     const platform = detectPlatform(location.href);
-    if (!platform) throw new Error(`No adapter for ${location.hostname}`);
+    if (!platform) {
+      appendHistory({
+        id: crypto.randomUUID(),
+        timestamp: new Date().toISOString(),
+        company: location.hostname.replace(/^www\./, ''),
+        title: document.title,
+        url: location.href,
+        platform: 'unknown',
+        status: 'error',
+        answered: 0,
+        total: 0,
+      }).catch(() => {});
+      throw new Error(`No adapter for ${location.hostname}`);
+    }
 
     postStatus(`Platform: ${platform}`);
+
+    const meta = scrapeJobMeta(platform);
 
     FILL_BASICS[platform]?.(profile);
     postStatus('Basic fields filled');
@@ -366,6 +429,7 @@ if (!window.__aiJobFillerLoaded) {
     const questions = getQuestions(platform);
     postStatus(`${questions.length} custom question(s) found`);
 
+    let errCount = 0;
     for (const q of questions) {
       postStatus(`AI writing: "${q.label.slice(0, 55)}…"`);
       const result = await chrome.runtime.sendMessage({
@@ -379,16 +443,30 @@ if (!window.__aiJobFillerLoaded) {
 
       if (result?.error) {
         postStatus(`Error: ${result.error}`);
+        errCount++;
         continue;
       }
 
       const el = document.querySelector(q.selector);
-      if (!el) { postStatus(`Field not found: ${q.selector}`); continue; }
+      if (!el) { postStatus(`Field not found: ${q.selector}`); errCount++; continue; }
       fillField(el, result.answer);
       postStatus(`Filled: "${q.label.slice(0, 40)}"`);
     }
 
     postStatus('Done — review the form before submitting.');
+
+    appendHistory({
+      id: crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
+      company: meta.company,
+      title: meta.title,
+      url: location.href,
+      platform,
+      status: errCount > 0 ? 'partial' : 'filled',
+      answered: questions.length - errCount,
+      total: questions.length,
+    }).catch(() => {});
+
     return { platform, questionCount: questions.length };
   }
 

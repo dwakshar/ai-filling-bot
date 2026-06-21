@@ -29,6 +29,42 @@
     .footer a { color: #6366f1; text-decoration: none; cursor: pointer; }
     .footer a:hover { text-decoration: underline; }
     .note { font-size: 10px; color: #94a3b8; margin-top: 6px; }
+
+    #historySection { margin-top: 12px; }
+    .hist-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .hist-title { font-size: 12px; font-weight: 600; color: #475569; }
+    .hist-actions { display: flex; gap: 5px; }
+    .hist-actions button {
+      font-size: 10px; padding: 2px 7px;
+      border: 1px solid #cbd5e1; border-radius: 4px;
+      background: #f1f5f9; color: #475569; cursor: pointer;
+    }
+    .hist-actions button:hover { background: #e2e8f0; }
+    #historyList {
+      max-height: 160px; overflow-y: auto;
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      font-size: 11px;
+    }
+    .hist-empty { padding: 8px; color: #94a3b8; text-align: center; }
+    .hist-row {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 8px; border-bottom: 1px solid #f1f5f9;
+      line-height: 1.4;
+    }
+    .hist-row:last-child { border-bottom: none; }
+    .hist-date { color: #94a3b8; white-space: nowrap; flex-shrink: 0; }
+    .hist-company { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #1e293b; }
+    .hist-status {
+      font-size: 10px; padding: 1px 5px; border-radius: 3px;
+      white-space: nowrap; flex-shrink: 0; font-weight: 500;
+    }
+    .hist-status.filled  { background: #dcfce7; color: #16a34a; }
+    .hist-status.partial { background: #fef9c3; color: #a16207; }
+    .hist-status.error   { background: #fee2e2; color: #dc2626; }
   </style>
 </head>
 <body>
@@ -37,6 +73,18 @@
   <button id="fillBtn" disabled>Fill Application</button>
   <div id="log"></div>
   <p class="note">Resume upload must be done manually (browser security restriction).</p>
+
+  <div id="historySection">
+    <div class="hist-header">
+      <span class="hist-title">History</span>
+      <div class="hist-actions">
+        <button id="exportBtn">Export</button>
+        <button id="clearBtn">Clear</button>
+      </div>
+    </div>
+    <div id="historyList"><div class="hist-empty">No history yet.</div></div>
+  </div>
+
   <div class="footer"><a id="optionsLink">Settings</a></div>
   <script src="popup.js"></script>
 </body>

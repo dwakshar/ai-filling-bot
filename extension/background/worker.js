@@ -1,5 +1,33 @@
 const MODEL = 'claude-sonnet-4-6';
 
+// Statuses worth retrying; everything else (400, 401, 403…) is returned immediately
+const RETRY_STATUSES = new Set([429, 500, 502, 503, 529]);
+const MAX_ATTEMPTS   = 3;
+
+async function fetchWithRetry(url, options) {
+  let lastErr;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    if (attempt > 0) {
+      // ~1 s, ~2 s — exponential base with small jitter
+      const ms = 1000 * Math.pow(2, attempt - 1) + Math.random() * 200;
+      await new Promise(r => setTimeout(r, ms));
+    }
+    let res;
+    try {
+      res = await fetch(url, options);
+    } catch (netErr) {
+      // Network failure (offline, DNS, connection refused) — always retry
+      lastErr = netErr;
+      continue;
+    }
+    // Return immediately for success OR non-retryable status codes (auth errors, bad request…)
+    if (res.ok || !RETRY_STATUSES.has(res.status)) return res;
+    lastErr = res;
+  }
+  if (lastErr instanceof Error) throw lastErr;
+  return lastErr; // exhausted retries — return final bad Response so caller can read status
+}
+
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg.action === 'writeAnswer') {
     callClaude(msg)
@@ -30,7 +58,7 @@ ${JSON.stringify(profile, null, 2)}
 RESUME:
 ${resume || '(no resume text provided)'}`;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
