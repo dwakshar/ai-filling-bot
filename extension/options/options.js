@@ -1,4 +1,4 @@
-const PROFILE_FIELDS = ['firstName', 'lastName', 'email', 'phone', 'linkedin', 'github', 'portfolio', 'currentCompany', 'noticePeriod', 'expectedCtc'];
+const PROFILE_FIELDS = ['firstName', 'lastName', 'email', 'phone', 'linkedin', 'github', 'portfolio', 'currentCompany', 'noticePeriod', 'expectedSalary'];
 
 async function load() {
   const data = await chrome.storage.local.get(['profile', 'resume', 'apiKey']);

@@ -101,7 +101,7 @@ npm run apply
   "portfolio": "https://janedoe.dev",
   "currentCompany": "Acme Corp",
   "noticePeriod": "30 days",
-  "expectedCtc": "25 LPA"
+  "expectedSalary": "25 LPA"
 }
 ```
 

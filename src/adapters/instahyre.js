@@ -67,14 +67,14 @@ export class InstahyreAdapter extends Adapter {
       ], profile.noticePeriod);
     }
 
-    if (profile.expectedCtc) {
+    if (profile.expectedSalary) {
       await this.#tryFill(page, [
+        'input[placeholder*="expected salary" i]',
         'input[placeholder*="expected" i]',
-        'input[placeholder*="ctc" i]',
+        'input[aria-label*="expected salary" i]',
         'input[aria-label*="expected" i]',
-        'input[aria-label*="ctc" i]',
         'input[name*="expected" i]',
-      ], String(profile.expectedCtc));
+      ], String(profile.expectedSalary));
     }
   }
 

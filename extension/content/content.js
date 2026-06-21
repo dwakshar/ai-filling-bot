@@ -145,7 +145,7 @@ if (!window.__aiJobFillerLoaded) {
     tryFill(['input[type="email"]', 'input[placeholder*="email" i]'], profile.email);
     tryFill(['input[type="tel"]', 'input[placeholder*="phone" i]', 'input[placeholder*="mobile" i]'], profile.phone);
     if (profile.noticePeriod) tryFill(['input[placeholder*="notice" i]', 'input[name*="notice" i]'], profile.noticePeriod);
-    if (profile.expectedCtc)  tryFill(['input[placeholder*="expected" i]', 'input[placeholder*="ctc" i]'], String(profile.expectedCtc));
+    if (profile.expectedSalary)  tryFill(['input[placeholder*="expected salary" i]', 'input[placeholder*="expected" i]'], String(profile.expectedSalary));
   }
 
   function fillBasicsNaukri(profile) {
@@ -154,7 +154,7 @@ if (!window.__aiJobFillerLoaded) {
     tryFill(['input[type="email"]', 'input[placeholder*="email" i]'], profile.email);
     tryFill(['input[type="tel"]', 'input[placeholder*="phone" i]', 'input[placeholder*="mobile" i]'], profile.phone);
     if (profile.noticePeriod) tryFill(['input[placeholder*="notice" i]', 'input[name*="notice" i]'], profile.noticePeriod);
-    if (profile.expectedCtc)  tryFill(['input[placeholder*="expected ctc" i]', 'input[placeholder*="expected salary" i]'], String(profile.expectedCtc));
+    if (profile.expectedSalary)  tryFill(['input[placeholder*="expected salary" i]', 'input[placeholder*="expected ctc" i]'], String(profile.expectedSalary));
   }
 
   const FILL_BASICS = { greenhouse: fillBasicsGreenhouse, lever: fillBasicsLever, ashby: fillBasicsAshby, wellfound: fillBasicsWellfound, instahyre: fillBasicsInstahyre, naukri: fillBasicsNaukri };

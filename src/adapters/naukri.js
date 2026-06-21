@@ -72,13 +72,14 @@ export class NaukriAdapter extends Adapter {
       ], profile.noticePeriod);
     }
 
-    if (profile.expectedCtc) {
+    if (profile.expectedSalary) {
       await this.#tryFill(page, [
-        'input[placeholder*="expected ctc" i]',
         'input[placeholder*="expected salary" i]',
+        'input[placeholder*="expected ctc" i]',
+        'input[aria-label*="expected salary" i]',
         'input[aria-label*="expected ctc" i]',
         'input[name*="expected" i]',
-      ], String(profile.expectedCtc));
+      ], String(profile.expectedSalary));
     }
   }
 
