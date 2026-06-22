@@ -16,8 +16,8 @@ if (!url) {
   process.exit(1);
 }
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  console.error('ANTHROPIC_API_KEY is not set in .env.local');
+if (!process.env.GEMINI_API_KEY) {
+  console.error('GEMINI_API_KEY is not set in .env.local');
   process.exit(1);
 }
 

@@ -1,12 +1,12 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const MODEL = 'claude-sonnet-4-6';
+const MODEL = 'gemini-2.0-flash';
 
 let _client;
 
 function getClient() {
   if (!_client) {
-    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    _client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   }
   return _client;
 }
@@ -42,14 +42,13 @@ ${question}
 
 Write the answer now.`;
 
-  const msg = await client.messages.create({
-    model: MODEL,
-    max_tokens: 512,
-    system,
-    messages: [{ role: 'user', content: user }],
+  const model = client.getGenerativeModel({ model: MODEL, systemInstruction: system });
+  const result = await model.generateContent({
+    contents: [{ role: 'user', parts: [{ text: user }] }],
+    generationConfig: { maxOutputTokens: 512 },
   });
 
-  return msg.content[0].text.trim();
+  return result.response.text().trim();
 }
 
 export async function writeColdEmail({ contact, resume, profile }) {
@@ -86,14 +85,13 @@ ${resume || '(no resume text provided)'}`;
     .filter(Boolean)
     .join('\n');
 
-  const msg = await client.messages.create({
-    model: MODEL,
-    max_tokens: 512,
-    system,
-    messages: [{ role: 'user', content: `CONTACT:\n${contactContext}\n\nWrite the cold email now. Return JSON only.` }],
+  const model = client.getGenerativeModel({ model: MODEL, systemInstruction: system });
+  const result = await model.generateContent({
+    contents: [{ role: 'user', parts: [{ text: `CONTACT:\n${contactContext}\n\nWrite the cold email now. Return JSON only.` }] }],
+    generationConfig: { maxOutputTokens: 512 },
   });
 
-  const raw = msg.content[0].text.trim();
+  const raw = result.response.text().trim();
   const json = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
   return JSON.parse(json);
 }

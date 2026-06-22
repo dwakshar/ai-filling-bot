@@ -1,4 +1,4 @@
-const MODEL = 'claude-sonnet-4-6';
+const MODEL = 'gemini-2.0-flash';
 
 // Statuses worth retrying; everything else (400, 401, 403…) is returned immediately
 const RETRY_STATUSES = new Set([429, 500, 502, 503, 529]);
@@ -30,14 +30,14 @@ async function fetchWithRetry(url, options) {
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg.action === 'writeAnswer') {
-    callClaude(msg)
+    callGemini(msg)
       .then(sendResponse)
       .catch(err => sendResponse({ error: err.message }));
     return true; // keep channel open for async response
   }
 });
 
-async function callClaude({ apiKey, profile, resume, jobDescription, question }) {
+async function callGemini({ apiKey, profile, resume, jobDescription, question }) {
   const name = `${profile.firstName} ${profile.lastName}`;
 
   const system = `You are filling out a job application on behalf of ${name}.
@@ -58,24 +58,20 @@ ${JSON.stringify(profile, null, 2)}
 RESUME:
 ${resume || '(no resume text provided)'}`;
 
-  const response = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+
+  const response = await fetchWithRetry(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 512,
-      system,
-      messages: [
+      system_instruction: { parts: [{ text: system }] },
+      contents: [
         {
           role: 'user',
-          content: `JOB DESCRIPTION:\n${jobDescription || '(not provided)'}\n\nQUESTION:\n${question}\n\nWrite the answer now.`,
+          parts: [{ text: `JOB DESCRIPTION:\n${jobDescription || '(not provided)'}\n\nQUESTION:\n${question}\n\nWrite the answer now.` }],
         },
       ],
+      generationConfig: { maxOutputTokens: 512 },
     }),
   });
 
@@ -85,5 +81,5 @@ ${resume || '(no resume text provided)'}`;
   }
 
   const data = await response.json();
-  return { answer: data.content[0].text.trim() };
+  return { answer: data.candidates[0].content.parts[0].text.trim() };
 }
