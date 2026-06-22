@@ -4,10 +4,10 @@
 
 **Stop copy-pasting. Start applying.**
 
-AI Job Filler uses Claude to read job descriptions, understand your resume, and write tailored answers to every custom question — automatically. Run it as a CLI bot that applies to a whole list overnight, or install the Chrome extension and fill any form in one click.
+AI Job Filler uses Gemini to read job descriptions, understand your resume, and write tailored answers to every custom question — automatically. Run it as a CLI bot that applies to a whole list overnight, or install the Chrome extension and fill any form in one click.
 
 [![Node.js](https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white)](https://nodejs.org)
-[![Powered by Claude](https://img.shields.io/badge/Powered%20by-Claude%20Sonnet-6B47ED?logo=anthropic&logoColor=white)](https://anthropic.com)
+[![Powered by Gemini](https://img.shields.io/badge/Powered%20by-Gemini%202.0%20Flash-4285F4?logo=google&logoColor=white)](https://aistudio.google.com)
 [![Playwright](https://img.shields.io/badge/Playwright-1.45+-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension%20MV3-4285F4?logo=googlechrome&logoColor=white)](extension/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -19,7 +19,7 @@ AI Job Filler uses Claude to read job descriptions, understand your resume, and 
 ## ✨ What it does
 
 - **Fills basics automatically** — name, email, phone, LinkedIn, GitHub, portfolio, CTC, notice period
-- **Writes custom answers with Claude** — tailored to the specific company and JD, never generic
+- **Writes custom answers with Gemini** — tailored to the specific company and JD, never generic
 - **Strict no-hallucination rules** — only claims skills and experience from your resume
 - **Two modes** — a headless CLI batch runner and a one-click Chrome extension
 - **6 platforms supported** — Greenhouse, Lever, Ashby, Wellfound, Instahyre, Naukri
@@ -50,7 +50,7 @@ No terminal. Works while you browse.
 2. Open **`chrome://extensions`** → enable **Developer mode**
 3. Click **Load unpacked** → select the `extension/` folder
 4. Click the extension icon → **Settings**
-5. Enter your Anthropic API key, profile details, and paste your resume text
+5. Enter your Gemini API key, profile details, and paste your resume text
 6. Navigate to any supported job page → click **Fill Application**
 
 > **Note:** Resume file upload must be done manually — Chrome blocks extensions from setting file inputs for security reasons.
@@ -70,7 +70,7 @@ npx playwright install chromium
 
 # 3. Set your API key
 cp .env.example .env.local
-# Add ANTHROPIC_API_KEY to .env.local
+# Add GEMINI_API_KEY to .env.local  (get it free at aistudio.google.com)
 
 # 4. Add your profile & resume
 #    Edit config/profile.json with your details
@@ -107,9 +107,9 @@ npm run apply
 
 ### `.env.local`
 
-| Variable            | Default | Description                                                                       |
-| ------------------- | ------- | --------------------------------------------------------------------------------- |
-| `ANTHROPIC_API_KEY` | —       | **Required.** Get yours at [console.anthropic.com](https://console.anthropic.com) |
+| Variable         | Default | Description                                                                   |
+| ---------------- | ------- | ----------------------------------------------------------------------------- |
+| `GEMINI_API_KEY` | —       | **Required.** Get yours free at [aistudio.google.com](https://aistudio.google.com) |
 | `REVIEW_MODE`       | `true`  | Pause after each form so you can review before submitting                         |
 | `AUTO_SUBMIT`       | `false` | Auto-click Submit — use with caution                                              |
 | `AUTO_SEND`         | `false` | Auto-send cold outreach emails                                                    |
@@ -137,7 +137,7 @@ You add job URLs to data/jobs.txt
     Finds custom questions on the form
          │
          ▼
-    Claude reads your resume + JD
+    Gemini reads your resume + JD
     writes a tailored answer per question
          │
          ▼
@@ -168,7 +168,7 @@ ai-filling-bot/
 ├── src/
 │   ├── index.js          # CLI orchestrator
 │   ├── browser.js        # Persistent Playwright browser
-│   ├── ai.js             # Claude API wrapper
+│   ├── ai.js             # Gemini API wrapper
 │   ├── email.js          # Cold email generator
 │   ├── state.js          # Result logger & screenshots
 │   └── adapters/
@@ -181,7 +181,7 @@ ai-filling-bot/
 │       └── naukri.js
 ├── extension/            # Chrome Extension (MV3)
 │   ├── manifest.json
-│   ├── background/       # Service worker → Claude API
+│   ├── background/       # Service worker → Gemini API
 │   ├── content/          # DOM adapter logic
 │   ├── popup/            # Extension popup UI
 │   └── options/          # Settings page
@@ -193,7 +193,7 @@ ai-filling-bot/
 
 ## 🤖 AI Answer Quality
 
-Every answer Claude writes follows strict rules:
+Every answer Gemini writes follows strict rules:
 
 - **No hallucinations** — only uses facts from your resume and profile; never invents skills, employers, or numbers
 - **Company-specific** — reads the actual JD and ties answers to it
@@ -225,7 +225,7 @@ Every answer Claude writes follows strict rules:
 
 | Layer              | Technology                                               |
 | ------------------ | -------------------------------------------------------- |
-| AI                 | [Claude Sonnet](https://anthropic.com) via Anthropic API |
+| AI                 | [Gemini 2.0 Flash](https://aistudio.google.com) via Google Gemini API (free) |
 | Browser automation | [Playwright](https://playwright.dev)                     |
 | Runtime            | Node.js 22+ (ESM)                                        |
 | Extension          | Chrome MV3, Vanilla JS (no bundler needed)               |
